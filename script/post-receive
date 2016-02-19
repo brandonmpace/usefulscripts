@@ -5,6 +5,8 @@
 # Changed by Eric Zhiqiang Ma http://www.ericzma.com
 # Howto use this script: http://www.fclose.com/1473/setting-up-git-commit-email-notification/
 #
+# Changed further by Brandon M. Pace
+#
 # Copyright (c) 2007 Andy Parkins
 #
 # An example hook script to mail out commit update information.  This hook
@@ -41,7 +43,7 @@
 #   If set then the -f option is passed to sendmail to allow the envelope
 #   sender address to be set
 # hooks.emailprefix
-#   All emails have their subjects prefixed with this prefix, or "[SCM]"
+#   All emails have their subjects prefixed with this prefix, or "[GIT]"
 #   if emailprefix is unset, to aid filtering
 # hooks.showrev
 #   The shell command used to format each revision in the email, with
@@ -298,7 +300,7 @@ generate_update_branch_email()
     #
     #  git rev-parse --not --all | grep -v $(git rev-parse $refname)
     #
-    # Get's us to something pretty safe (apart from the small time
+    # gets us to something pretty safe (apart from the small time
     # between refname being read, and git rev-parse running - for that,
     # I give up)
     #
@@ -771,6 +773,11 @@ else
         # Note: use the following command if you need smtp and change the smtp server to yours
         # cat $email_tmp_file | mailx -S smtp="smtp://smtp.cse.ust.hk" -s "$emailsubject" -r $senderemail $recipients
         cat $email_tmp_file | mailx -s "$emailsubject" -r $senderemail $recipients
+
+        # If you wish to use 'sendemail' instead:
+
+        # cat $email_tmp_file | sendemail -f $senderemail -t $recipients -u "$emailsubject" -s smtp.cse.ust.hk -q
+
 
         rm -f $emailsubject_tmp_file $email_tmp_file
     done
